@@ -1,3 +1,10 @@
+/*
+ * @author Alexander Kline and Whitney Trovinger 
+ * 
+ * https://www.youtube.com/watch?time_continue=1&v=zVrPdF7f4-I&feature=emb_logo
+ * https://www.geeksforgeeks.org/graph-and-its-representations/ 
+ */
+
 import java.util.*;
 
 public class Application { 
@@ -126,7 +133,7 @@ public class Application {
 	
 	/*
 	 * traverse the graph recursively
-	 * code found here:
+	 * code for search found here:
 	 * https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/
 	 */
 	
