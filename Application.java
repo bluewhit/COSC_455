@@ -5,7 +5,6 @@ public class Application {
 	static LinkedList<Integer> graph[];
 	static ArrayList<Edge> edges; //for testing
 	static Scanner input;	
-	static ArrayList edgesTest;
 	
 	public static void main(String[] args) {
 		Random rand = new Random();
@@ -25,11 +24,11 @@ public class Application {
 		
 		edges = new ArrayList<Edge>();
 		
-		int rNum, rNum2, maxEdges, minEdges;
-		maxEdges = ((numV-1) * numV) /2;
-		minEdges = numV;
-		numE = rand.nextInt(maxEdges - minEdges) + minEdges; //create random number of edges 
-		System.out.println(numE);
+		int rNum, rNum2;
+		int maxEdges = ((numV-1) * numV)/2;
+		int minEdges = numV-1; 
+		numE = rand.nextInt(maxEdges - minEdges) + minEdges; //create random number of edges from numV-1 to a Complete Graph
+		
 		for(int i=0; i<numE; i++) {
 			
 			do {//the while check if the edge already exists. Sometimes edges get duplicated it seems.
@@ -50,6 +49,54 @@ public class Application {
 		DFS(0);
 	}//end main
 	
+	public void traverseGraph() {
+		
+		int[] tempArray = countEdges(); 
+		
+		int minNum = 0; 
+		int minVertex = 0; 
+		for(int i = 0; i <= tempArray.length; i++) {
+			
+			if(minNum < tempArray[i]) {
+				minNum = tempArray[i]; 
+				minVertex = i; 
+			}//end if 
+		}//end for 
+		
+		if(minNum < 2) {
+			System.out.println("Not a hamiltonian graph! The degree of vertex" + minVertex + " is less than 2!");
+		}//end if 
+		
+		//put min Vertex 
+	}
+	
+	/*
+	 * Count Edges 
+	 */
+	public int[] countEdges() {
+		
+		//array to hold numbers 
+		int[] totalEdges = new int[numV]; 
+		
+		//counts the number of edges for each vertex 
+		for(int v=0; v<numV; v++) {
+			
+			int countEdges = 0;
+			for(Integer n: graph[v]) {
+				countEdges++; 
+			}//end inner for
+			
+			totalEdges[v] = countEdges; 
+		}//end for
+			
+		return totalEdges; 
+	}
+	
+	/**
+	 * @param num1
+	 * @param num2
+	 * @return a boolean
+	 */
 	public static boolean checkEdge(int num1, int num2) { //return true if edge exists 
 		//Doesnt work with smaller vertices i think
 		for(Edge e: edges) {
@@ -61,7 +108,14 @@ public class Application {
 		return false;
 	}//end checkEdge
 	
+	/**
+	 * @param v1
+	 * @param v2
+	 */
+	
+	static int counter = 0; 
 	public static void addEdge(int v1, int v2) { //add edge to the graph
+		counter++;
 		graph[v1].add(v2); //at vertex1 add an edge to vertex 2
 		graph[v2].add(v1); //since its unweighted, also add an edge from vertex 2, to vertex 1
 	}//end add edge
@@ -80,6 +134,11 @@ public class Application {
 	
 	
 	
+	/*
+	 * DFS and DFSUtil traverse the graph recursively
+	 * code found here:
+	 * https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/
+	 */
 	
 	 // A function used by DFS 
     static void DFSUtil(int v,boolean visit[]) 
@@ -119,7 +178,7 @@ public class Application {
 	
 	
 }//end class
-
+//Edge class was only made to be able to check the graph for duplicate edges
 class Edge{
 	int v1, v2;
 	public Edge(int v1, int v2) {
