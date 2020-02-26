@@ -17,20 +17,20 @@ public class Application {
 		}//end check 
 		
 		graph = new LinkedList[numV]; //generate linkedList 
+		boolean visited[] = new boolean[numV]; //generate our visited list
 		
 		for(int v=0; v < numV; v++) {
 			graph[v] = new LinkedList<>();
 		}//end for
 		
-		edges = new ArrayList<Edge>();
+		edges = new ArrayList<Edge>(); //make edge array for check
 		
 		int rNum, rNum2;
 		int maxEdges = ((numV-1) * numV)/2;
 		int minEdges = numV-1; 
 		numE = rand.nextInt(maxEdges - minEdges) + minEdges; //create random number of edges from numV-1 to a Complete Graph
 		
-		for(int i=0; i<numE; i++) {
-			
+		for(int i=0; i<numE; i++) { //loop numE times
 			do {//the while check if the edge already exists. Sometimes edges get duplicated it seems.
 				rNum=rand.nextInt(numV);
 				rNum2=rand.nextInt(numV);				
@@ -44,36 +44,34 @@ public class Application {
 			addEdge(rNum, rNum2); //actually add the edge to the graph
 			
 		}//end populate graph
+		int minVertex = smallestDegree();
 		print();
-		System.out.println("TRAVERSE");
-		DFS(0);
+		if(minVertex < 2) {
+			System.out.println("Not a hamiltonian graph! The degree of vertex " + minVertex + " is less than 2!");
+		}else { //end if 
+			System.out.println("TRAVERSE");
+			traverseGraph(minVertex, visited);
+		}
 	}//end main
 	
-	public void traverseGraph() {
-		
+	static int smallestDegree() {
 		int[] tempArray = countEdges(); 
 		
 		int minNum = 0; 
-		int minVertex = 0; 
-		for(int i = 0; i <= tempArray.length; i++) {
-			
+		int minVertex = -1; 
+		for(int i = 0; i <= tempArray.length-1; i++) {
 			if(minNum < tempArray[i]) {
 				minNum = tempArray[i]; 
 				minVertex = i; 
 			}//end if 
 		}//end for 
-		
-		if(minNum < 2) {
-			System.out.println("Not a hamiltonian graph! The degree of vertex" + minVertex + " is less than 2!");
-		}//end if 
-		
-		//put min Vertex 
+		return minVertex;
 	}
 	
 	/*
 	 * Count Edges 
 	 */
-	public int[] countEdges() {
+	static int[] countEdges() {
 		
 		//array to hold numbers 
 		int[] totalEdges = new int[numV]; 
@@ -90,7 +88,7 @@ public class Application {
 		}//end for
 			
 		return totalEdges; 
-	}
+	}//count Edges
 	
 	/**
 	 * @param num1
@@ -101,7 +99,6 @@ public class Application {
 		//Doesnt work with smaller vertices i think
 		for(Edge e: edges) {
 			if((e.v1==num1 && e.v2== num2) || (e.v1==num2 && e.v2== num1)) {
-				System.out.println("WHY?");
 				return true;
 			}//end if else chain
 		}//end for
@@ -112,11 +109,8 @@ public class Application {
 	 * @param v1
 	 * @param v2
 	 */
-	
-	static int counter = 0; 
 	public static void addEdge(int v1, int v2) { //add edge to the graph
-		counter++;
-		graph[v1].add(v2); //at vertex1 add an edge to vertex 2
+		graph[v1].add(v2); //at vertex 1 add an edge to vertex 2
 		graph[v2].add(v1); //since its unweighted, also add an edge from vertex 2, to vertex 1
 	}//end add edge
 	
@@ -130,22 +124,18 @@ public class Application {
 		}//end for
 	}//end print
 	
-	
-	
-	
-	
 	/*
-	 * DFS and DFSUtil traverse the graph recursively
+	 * traverse the graph recursively
 	 * code found here:
 	 * https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/
 	 */
 	
 	 // A function used by DFS 
-    static void DFSUtil(int v,boolean visit[]) 
+    static void traverseGraph(int v, boolean visit[]) 
     { 
         // Mark the current node as visited and print it 
         visit[v] = true; 
-        System.out.print(v+" "); 
+        System.out.print(v + " "); 
   
         // Recur for all the vertices adjacent to this vertex 
         Iterator<Integer> i = graph[v].listIterator(); 
@@ -153,30 +143,10 @@ public class Application {
         { 
             int n = i.next(); 
             if (!visit[n]) 
-                DFSUtil(n, visit); 
+                traverseGraph(n, visit); 
         } 
     } 
-  
-     // The function to do DFS traversal. It uses recursive DFSUtil() 
-    public static void DFS(int v) 
-    { 
-        // Mark all the vertices as not visited(set as 
-        // false by default in java) 
-        boolean visited[] = new boolean[numV]; 
-  
-        // Call the recursive helper function to print DFS traversal 
-        DFSUtil(v, visited); 
-    } 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }//end class
 //Edge class was only made to be able to check the graph for duplicate edges
 class Edge{
