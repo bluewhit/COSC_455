@@ -57,18 +57,23 @@ public class Application {
 			
 		}//end populate graph
 		print();
+		
+		traverseGraph(); 
 	}//end main
 	
 	
-	public void traverseGraph() {
+	//goes through our graph
+	//returns void 
+	public static void traverseGraph() {
 		
 		int[] tempArray = countEdges(); 
 		
-		int minNum = 0; 
+		int minNum = 5000; 
 		int minVertex = 0; 
-		for(int i = 0; i <= tempArray.length; i++) {
+		for(int i = 0; i < tempArray.length; i++) {
 			
-			if(minNum < tempArray[i]) {
+			if(minNum > tempArray[i]) {
+				
 				minNum = tempArray[i]; 
 				minVertex = i; 
 			}//end if 
@@ -78,14 +83,16 @@ public class Application {
 			System.out.println("Not a hamiltonian graph! The degree of vertex" + minVertex + " is less than 2!");
 		}//end if 
 		
+		System.out.println("The min vertex is: " + minVertex);
 		//put min Vertex 
 	}
 	
 	
 	/*
 	 * Count Edges 
+	 * returns an array of the number of edges each vertex has. 
 	 */
-	public int[] countEdges() {
+	public static int[] countEdges() {
 		
 		//array to hold numbers 
 		int[] totalEdges = new int[numV]; 
@@ -113,8 +120,6 @@ public class Application {
 		
 		for(Edge e: edges) {
 			if((e.v1 == num1 && e.v2==num2) || (e.v1 == num2 && e.v2 == num1)) {
-				System.out.println(" ");
-				System.out.println("Im looping!");
 				System.out.println("num1 " + num1 + " num2 " + num2);
 				return true; 
 			}//end if 
