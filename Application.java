@@ -8,8 +8,9 @@
 import java.util.*;
 
 public class Application {
-	static int numV, numE;
+	static int numV, numE, minVertex, lastVertex;
 	static LinkedList<Integer> graph[];
+	static ArrayList<Integer> check; //new
 	static ArrayList<Edge> edges; //for testing
 	static Scanner input;
 
@@ -18,12 +19,14 @@ public class Application {
 		input = new Scanner(System.in);
 		System.out.print("Enter the number of Vertices: ");
 		numV= input.nextInt();
+		
 		while(numV>50) {//check to make sure there's not too many vertices
 			System.out.println("Too many Vertices, dont break me. \nTry again: ");
 			numV=input.nextInt();
 		}//end check
 
 		graph = new LinkedList[numV]; //generate linkedList
+		check = new ArrayList<Integer>(); //used to check that we only visited each vertex once
 		boolean visited[] = new boolean[numV]; //generate our visited list
 
 		for(int v=0; v < numV; v++) {
@@ -51,29 +54,41 @@ public class Application {
 			addEdge(rNum, rNum2); //actually add the edge to the graph
 
 		}//end populate graph
-		int minVertex = smallestDegree();
+		//int minDeg = smallestDegree();
+		
 		print();
-		if(minVertex < 2) {
+		traverseGraph(minVertex, visited);
+		
+		//new
+		System.out.println();
+		System.out.println(lastVertex);
+		System.out.println();
+		
+		//new
+		if(smallestDegree() < 2) {
 			System.out.println("Not a hamiltonian graph! The degree of vertex " + minVertex + " is less than 2!");
+		}else if(check.size() != numV) {
+			System.out.println("Not a Hamiltonian graph! A Vertex was visited twice.");
 		}else { //end if
-			System.out.println("TRAVERSE");
-			traverseGraph(minVertex, visited);
+			for(Integer n: graph[lastVertex])
+				if(n==minVertex);
+				System.out.println("SHOULD BE HAMILTONIAN");
 		}
 	}//end main
 
 	static int smallestDegree() {
 		int[] tempArray = countEdges();
 
-		int minNum = 5000;
-		int minVertex = -1;
+		int minNum = 500;
+		minVertex = -1;
 		for(int i = 0; i <= tempArray.length-1; i++) {
-			if(minNum < tempArray[i]) {
+			if(minNum > tempArray[i]) {
 				minNum = tempArray[i];
 				minVertex = i;
 			}//end if
 		}//end for
 
-		return minVertex;
+		return minNum;
 	}
 
 	/*
@@ -144,10 +159,12 @@ public class Application {
     {
         // Mark the current node as visited and print it
         visit[v] = true;
+        check.add(v); //new
         System.out.print(v + " ");
 
         // Recur for all the vertices adjacent to this vertex
         Iterator<Integer> i = graph[v].listIterator();
+        lastVertex = v;
         while (i.hasNext())
         {
             int n = i.next();
