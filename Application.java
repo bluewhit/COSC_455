@@ -64,7 +64,7 @@ public class Application {
 	static int smallestDegree() {
 		int[] tempArray = countEdges();
 
-		int minNum = 0;
+		int minNum = 5000;
 		int minVertex = -1;
 		for(int i = 0; i <= tempArray.length-1; i++) {
 			if(minNum < tempArray[i]) {
