@@ -54,7 +54,7 @@ public class Application {
 			addEdge(rNum, rNum2); //actually add the edge to the graph
 
 		}//end populate graph
-		//int minDeg = smallestDegree();
+		int minDeg = smallestDegree();
 		
 		print();
 		traverseGraph(minVertex, visited);
@@ -65,7 +65,7 @@ public class Application {
 		System.out.println();
 		
 		//new
-		if(smallestDegree() < 2) {
+		if(minDeg < 2) {
 			System.out.println("Not a hamiltonian graph! The degree of vertex " + minVertex + " is less than 2!");
 		}else if(check.size() != numV) {
 			System.out.println("Not a Hamiltonian graph! A Vertex was visited twice.");
@@ -171,7 +171,7 @@ public class Application {
             if (!visit[n])
                 traverseGraph(n, visit);
         }
-    }
+    }//end traverseGraph
 
 }//end class
 //Edge class was only made to be able to check the graph for duplicate edges
